@@ -2367,20 +2367,20 @@ input[type="range"]::-moz-range-thumb {
 	.hero__inner {
 		gap: 0;
 	}
-	/* светофор над текстом: столб уходит под шапку и упирается в линию */
+	/* светофор под текстом и кнопками: столб начинается от линии
+	   над ним и уходит в нижнюю границу героя */
 	.hero__media {
-		order: -1;
-		padding-block: 24px 32px;
-		border-bottom: 1px solid var(--g-line-on-dark);
+		padding-block: 32px;
+		border-top: 1px solid var(--g-line-on-dark);
 	}
 	.sign {
 		width: min(100%, 360px);
 	}
-	.sign::after {
-		height: calc(10% + 33px);
+	.sign::before {
+		height: calc(10% + 32px);
 	}
 	.hero__content {
-		padding-bottom: 56px;
+		padding-bottom: 48px;
 	}
 	.container {
 		padding-inline: 24px;
@@ -2449,13 +2449,13 @@ input[type="range"]::-moz-range-thumb {
 	}
 	.hero__media {
 		margin-inline: calc(var(--g-gutter) * -1);
-		padding-block: 16px 24px;
+		padding-block: 24px;
 	}
 	.sign {
 		width: min(78%, 300px);
 	}
-	.sign::after {
-		height: calc(10% + 25px);
+	.sign::before {
+		height: calc(10% + 24px);
 	}
 	.hero__content {
 		padding-bottom: 40px;
