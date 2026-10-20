@@ -2849,6 +2849,12 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @media (max-width: 720px) {
+	/* длинные подписи кнопок переносятся, а не вылезают за края */
+	.btn {
+		white-space: normal;
+		text-align: center;
+		line-height: 1.25;
+	}
 	.sticky-cta {
 		position: fixed;
 		left: 16px;
