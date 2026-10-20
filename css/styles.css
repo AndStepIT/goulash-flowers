@@ -632,6 +632,8 @@ p {
 
 .sign::after {
 	top: 90%;
+	/* низ столба на рендере темнее верха — своя полоска без шва */
+	background-image: url("../assets/img/pole-bottom.png");
 }
 
 /* края рендера растворяются в продолжении столба — без шва */
@@ -826,7 +828,7 @@ p {
 
 .chapter__time {
 	display: block;
-	font-size: 14px;
+	font-size: 18px;
 	margin-bottom: 6px;
 	color: var(--g-cyan);
 }
@@ -2612,7 +2614,7 @@ input[type="range"]::-moz-range-thumb {
 	}
 	.pain--wide,
 	.pain--narrow {
-		grid-column: span 12;
+		grid-column: span 6;
 	}
 	.steps {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2731,6 +2733,10 @@ input[type="range"]::-moz-range-thumb {
 	}
 	.pain {
 		padding: 24px;
+	}
+	.pain--wide,
+	.pain--narrow {
+		grid-column: span 12;
 	}
 	.pain__value {
 		font-size: 44px;
