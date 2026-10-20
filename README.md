@@ -2,6 +2,8 @@
 
 Концепт-лендинг (тестовое задание): «Гуляш» для цветочных магазинов с доставкой.
 
+**Сайт:** https://andstepit.github.io/goulash-flowers/
+
 - `npm install` — зависимости
 - `npm run dev` — локальный сервер Vite
 - `npm run build` — сборка в `dist/`
