@@ -389,10 +389,19 @@ const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 
 		$$('[data-peak]', chipsWrap).forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
 		renderTimeline(PEAKS.find((p) => p.id === current));
 		renderCountdown();
+		renderCta();
 	});
+
+	const cta = $('[data-peak-cta]');
+	const renderCta = () => {
+		const peak = PEAKS.find((p) => p.id === current);
+		cta.firstChild.textContent = `Подготовиться к ${peak.gen} `;
+		cta.dataset.ctaContext = `Подготовка к ${peak.gen}`;
+	};
 
 	renderTimeline(nearest);
 	renderCountdown();
+	renderCta();
 	setInterval(renderCountdown, 20000);
 })();
 
@@ -533,6 +542,7 @@ const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 
    ========================================================================== */
 
 const panelHooks = {};
+let selectTab = () => {};
 (() => {
 	const tabs = $$('[data-tab]');
 	const select = (name, focus = false) => {
@@ -556,6 +566,16 @@ const panelHooks = {};
 		});
 	});
 	$$('[data-side]').forEach((s) => s.addEventListener('click', () => select(s.dataset.side)));
+	selectTab = select;
+
+	// «Посмотреть в кабинете» из карточек: открыть нужную вкладку и режим
+	document.addEventListener('click', (e) => {
+		const link = e.target.closest('[data-open-tab]');
+		if (!link) return;
+		select(link.dataset.openTab);
+		const extra = link.dataset.openClick && $(link.dataset.openClick);
+		if (extra) requestAnimationFrame(() => extra.click());
+	});
 })();
 
 // переключатели-«пилюли»: одна кнопка из группы нажата
@@ -1200,11 +1220,34 @@ function bindSwitch(group, onChange) {
 	};
 	inputs.forEach((i) => i.addEventListener('input', render));
 	render();
+
+	$('[data-calc-cta]').addEventListener('click', () => {
+		const orders = val('orders');
+		const volume = orders <= 30 ? 'до 30' : orders <= 100 ? '30–100' : orders <= 300 ? '100–300' : '300+';
+		const radio = $(`[name="volume"][value="${volume}"]`);
+		if (radio) radio.checked = true;
+		setFormContext(
+			`Расчёт: ${$('[data-calc-total]').textContent} в год · ${orders} заказов в день · чек ${rub(val('check'))} · точек: ${val('points')}`
+		);
+	});
 })();
 
 /* ==========================================================================
    Форма заявки
    ========================================================================== */
+
+// тема заявки: откуда пришёл человек (кнопка в блоке, расчёт калькулятора)
+function setFormContext(text) {
+	const box = $('[data-form-context]');
+	box.hidden = !text;
+	$('[data-form-context-text]', box).textContent = text || '';
+	box.querySelector('[name="context"]').value = text || '';
+}
+
+document.addEventListener('click', (e) => {
+	const link = e.target.closest('[data-cta-context]');
+	if (link) setFormContext(link.dataset.ctaContext);
+});
 
 (() => {
 	const form = $('[data-form]');
@@ -1290,7 +1333,7 @@ function bindSwitch(group, onChange) {
 		$$('[data-retry]').forEach((b) => (b.disabled = true));
 		try {
 			await fakeRequest(data);
-			$('[data-ok-text]').textContent = `${data.name.trim()}, перезвоним на ${data.phone} в течение 15 минут в рабочее время и покажем, как Гуляш проведёт ближайший праздник для «${data.shop.trim()}».`;
+			$('[data-ok-text]').textContent = `${data.name.trim()}, перезвоним на ${data.phone} в течение 15 минут в рабочее время и покажем, как Гуляш проведёт ближайший праздник для «${data.shop.trim()}».${data.context ? ` Тему «${data.context}» передадим менеджеру.` : ''}`;
 			showState('ok');
 		} catch (err) {
 			$('[data-err-text]').textContent =
@@ -1322,9 +1365,11 @@ function bindSwitch(group, onChange) {
 		await send();
 		btn.textContent = 'Отправить ещё раз';
 	});
+	$('[data-form-context-close]').addEventListener('click', () => setFormContext(''));
 	$('[data-back]').addEventListener('click', () => showState('form'));
 	$('[data-reset]').addEventListener('click', () => {
 		form.reset();
+		setFormContext('');
 		touched = false;
 		$$('.field', form).forEach((f) => f.classList.remove('is-invalid'));
 		$$('.field__error', form).forEach((f) => (f.textContent = ''));
@@ -1342,3 +1387,20 @@ $('[data-faq]').addEventListener('click', (e) => {
 	if (!q) return;
 	q.setAttribute('aria-expanded', String(q.getAttribute('aria-expanded') !== 'true'));
 });
+
+/* ==========================================================================
+   Липкая кнопка заявки на мобильном: после героя и пока форма не на экране
+   ========================================================================== */
+
+(() => {
+	const btn = $('[data-sticky-cta]');
+	const seen = { hero: true, connect: false };
+	const update = () => btn.classList.toggle('is-shown', !seen.hero && !seen.connect);
+	const watch = (el, key) =>
+		new IntersectionObserver(([entry]) => {
+			seen[key] = entry.isIntersecting;
+			update();
+		}).observe(el);
+	watch($('.hero'), 'hero');
+	watch($('#connect'), 'connect');
+})();
