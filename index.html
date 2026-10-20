@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Goulash.tech для цветочных магазинов</title>
+	<meta name="description" content="Система автоматизации для цветочных магазинов с доставкой: заказы из всех каналов в одной очереди, маршруты курьеров, напоминания о поводах клиентов и режим пикового дня.">
+	<meta name="theme-color" content="#040406">
+	<meta property="og:title" content="Goulash.tech для цветочных магазинов">
+	<meta property="og:description" content="Букет у двери за 60 минут. Даже 8 марта.">
+	<meta property="og:type" content="website">
+	<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+	<defs>
+		<symbol id="logo-mark" viewBox="0 0 48 48"><path d="M35.8708 0H11.6535C5.21774 0 0 5.24615 0 11.7169V36.0662C0 42.5369 5.21774 47.7831 11.6535 47.7831H35.8708C42.3065 47.7831 47.5243 42.5369 47.5243 36.0662V11.7154C47.5243 5.24462 42.3065 0 35.8708 0Z" fill="#00FFFF"/><path d="M15.8418 15.9297H7.92188V31.8558H15.8418V15.9297Z" fill="#040406"/><path d="M31.6827 15.9295V7.96484H15.8413V15.9295H31.6827Z" fill="#040406"/><path d="M15.8413 31.8555V39.8201H31.6827V31.8555H15.8413Z" fill="#040406"/><path d="M39.6031 23.8945H31.6831V31.8576H39.6031V23.8945Z" fill="#040406"/></symbol>
+		<symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+		<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+		<symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></symbol>
+		<symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 4h3.5v16H7zM13.5 4H17v16h-3.5z" fill="currentColor"/></symbol>
+		<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 8v5m0 3.5v.01M10.3 3.9 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+		<symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8Zm4 0V6a3 3 0 0 1 6 0v2" fill="none" stroke="#00FFFF" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+		<symbol id="i-flower" viewBox="0 0 24 24"><circle cx="12" cy="9" r="2.4" fill="#FF4F93"/><path d="M12 3.5c1.6 0 2.6 1.4 2.4 3 1.4-.8 3.2-.3 3.6 1.2.5 1.5-.6 2.9-2.2 3 1.2 1 1.3 2.8.1 3.7-1.2 1-2.9.5-3.6-.9-.7 1.4-2.4 1.9-3.6.9-1.2-.9-1.1-2.7.1-3.7-1.6-.1-2.7-1.5-2.2-3 .4-1.5 2.2-2 3.6-1.2-.2-1.6.8-3 2.4-3Z" fill="none" stroke="#FF4F93" stroke-width="1.5"/><path d="M12 15v6m0-2.5c-1.5-1.8-3.5-2-5-1.5m5 1.5c1.5-1.8 3.5-2 5-1.5" fill="none" stroke="#B1EC52" stroke-width="1.5" stroke-linecap="round"/></symbol>
+		<symbol id="i-bike" viewBox="0 0 24 24"><circle cx="6" cy="16" r="3.5" fill="none" stroke="#00FFFF" stroke-width="1.6"/><circle cx="18" cy="16" r="3.5" fill="none" stroke="#00FFFF" stroke-width="1.6"/><path d="M6 16l4-7h5l3 7M10 9l3 7h-7M14 6h3" fill="none" stroke="#00FFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+		<symbol id="i-door" viewBox="0 0 24 24"><path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17M4 21h16M14.5 12.5v.01" fill="none" stroke="#B1EC52" stroke-width="1.8" stroke-linecap="round"/></symbol>
+	</defs>
+</svg>
+
+<header class="header" data-header>
+	<div class="container header__inner">
+		<a class="logo" href="#top" aria-label="Goulash.tech для цветочных магазинов — наверх">
+			<svg aria-hidden="true"><use href="#logo-mark"/></svg>
+			<span class="logo__text">Goulash.tech</span>
+			<span class="logo__tag pixel">flowers</span>
+		</a>
+		<nav class="nav" id="nav" aria-label="Основная навигация">
+			<a href="#film">Как это работает</a>
+			<a href="#demo">Демо кабинета</a>
+			<a href="#peak">8 марта</a>
+			<a href="#faq">Вопросы</a>
+		</nav>
+		<a class="btn btn--light btn--sm header__cta" href="#connect">Подключить</a>
+		<button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Меню" data-burger>
+			<span></span><span></span><span></span>
+		</button>
+	</div>
+</header>
+
+<main id="top">
+
+	<!-- ================= HERO ================= -->
+	<section class="hero" aria-labelledby="hero-title">
+		<span class="gridlines" aria-hidden="true"></span>
+		<div class="container hero__inner">
+			<div class="hero__content">
+				<p class="hero__eyebrow">
+					<span>Система автоматизации</span>
+					<span>для цветочных магазинов с доставкой</span>
+				</p>
+				<h1 class="hero__title" id="hero-title">Букет у&nbsp;двери за&nbsp;60&nbsp;минут. Даже 8&nbsp;марта<span class="hero__sup">*</span></h1>
+				<p class="hero__lead">Заказы со всех каналов в одной очереди флориста, курьеры по оптимальным маршрутам, а клиенты возвращаются к каждому своему поводу.</p>
+				<div class="hero__actions">
+					<a class="btn btn--light" href="#connect">Обсудить за 15 минут <svg aria-hidden="true"><use href="#i-chevron"/></svg></a>
+					<a class="btn btn--ghost" href="#demo">Попробовать кабинет</a>
+				</div>
+				<div class="hero__peak">
+					<span class="hero__peak-num pixel" data-hero-days>—</span>
+					<span class="hero__peak-text" data-hero-peak>дней до ближайшего пика. Подключение занимает 21 день.</span>
+				</div>
+			</div>
+
+			<div class="signpost" aria-hidden="true">
+				<span class="signpost__pole"></span>
+				<div class="signbox signbox--top">
+					<div class="signbox__screen"><canvas data-led="flowers" width="512" height="512"></canvas></div>
+				</div>
+				<div class="signbox signbox--bottom">
+					<div class="signbox__screen"><canvas data-led="courier" width="512" height="512"></canvas></div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ================= ФИЛЬМ ================= -->
+	<section class="section" id="film" aria-labelledby="film-title">
+		<span class="gridlines" aria-hidden="true"></span>
+		<div class="container">
+			<div class="section-head">
+				<h2 class="h2" id="film-title">Один букет, 47 минут</h2>
+				<p class="lead">Путь заказа от клика до двери. Всё, что между ними, Гуляш делает сам: ставит заказ в очередь флориста, назначает курьера, строит маршрут и сообщает клиенту статус.</p>
+			</div>
+
+			<div class="film" data-film>
+				<video data-film-video muted playsinline loop preload="metadata" poster="assets/video/poster.jpg">
+					<source src="assets/video/goulash-flowers.mp4" type="video/mp4">
+				</video>
+				<div class="film__fallback" data-film-fallback hidden></div>
+				<span class="film__shade" aria-hidden="true"></span>
+
+				<div class="film__clock" aria-live="off">
+					<span class="film__clock-time pixel" data-film-time>00:00</span>
+					<span class="film__clock-label">с момента<br>заказа</span>
+				</div>
+
+				<div class="film__toast" data-film-toast>
+					<span class="film__toast-icon" data-film-icon><svg aria-hidden="true"><use href="#i-bag"/></svg></span>
+					<span>
+						<span class="film__toast-title" data-film-title>Заказ принят</span><br>
+						<span class="film__toast-text" data-film-text>Пионы, 15 шт · к 20:00 · сюрприз</span>
+					</span>
+				</div>
+
+				<button class="film__play" type="button" data-film-play aria-label="Пауза">
+					<svg aria-hidden="true"><use href="#i-pause"/></svg>
+				</button>
+			</div>
+
+			<div class="chapters" role="group" aria-label="Этапы заказа" data-chapters></div>
+		</div>
+	</section>
+
+	<!-- ================= БОЛИ ================= -->
+	<section class="section section--light" aria-labelledby="pains-title">
+		<span class="gridlines" aria-hidden="true"></span>
+		<div class="container">
+			<div class="section-head">
+				<h2 class="h2" id="pains-title">Где цветочный магазин теряет&nbsp;деньги</h2>
+				<p class="lead">Мы 10 лет автоматизируем доставку еды. У цветов те же законы: короткий цикл сборки, свои курьеры, обещанное время и гость, которого нужно вернуть.</p>
+			</div>
+
+			<div class="pains">
+				<article class="pain pain--wide pain--dark">
+					<span class="pain__value pixel">до ×10</span>
+					<h3 class="pain__title">Столько заказов приходит в пиковый день</h3>
+					<p class="pain__text">14 февраля и 8 марта приносят заметную долю годовой выручки. Флористы не успевают, курьеры едут в случайном порядке, а букет, опоздавший к празднику, оборачивается возвратом и плохим отзывом.</p>
+					<p class="pain__fix"><b>С Гуляшом:</b> слоты доставки закрываются по реальной мощности мастерской, курьеры уходят волнами по готовым маршрутам.</p>
+				</article>
+				<article class="pain pain--narrow">
+					<span class="pain__value pixel">5+</span>
+					<h3 class="pain__title">Каналов заказов и одна тетрадь</h3>
+					<p class="pain__text">WhatsApp, Telegram, сайт, маркетплейсы и звонки. Заказы переписывают вручную, путают адреса, продают закончившиеся пионы.</p>
+					<p class="pain__fix"><b>С Гуляшом:</b> все заказы в одной очереди, стоп-лист меняется сразу во всех каналах.</p>
+				</article>
+				<article class="pain pain--narrow">
+					<span class="pain__value pixel">3–7 дней</span>
+					<h3 class="pain__title">Столько живёт срезанный цветок</h3>
+					<p class="pain__text">Что не продали к пятнице, уходит в списание. Остатки считают на глаз, а потери видны только в конце месяца.</p>
+					<p class="pain__fix"><b>С Гуляшом:</b> склад свежести подсказывает, из чего собрать букет дня, пока цветы ещё можно продать.</p>
+				</article>
+				<article class="pain pain--wide">
+					<span class="pain__value pixel">1 раз</span>
+					<h3 class="pain__title">Клиент покупает и пропадает</h3>
+					<p class="pain__text">Он заказал букет жене на день рождения. Через год он снова наберёт в поиске «цветы с доставкой», и первыми там окажутся ваши конкуренты.</p>
+					<p class="pain__fix"><b>С Гуляшом:</b> система запоминает повод и за 3 дня напоминает о нём в приложении. Прошлый букет можно повторить в один тап.</p>
+				</article>
+			</div>
+		</div>
+	</section>
+
+	<!-- ================= ДЕМО ================= -->
+	<section class="section" id="demo" aria-labelledby="demo-title">
+		<span class="gridlines" aria-hidden="true"></span>
+		<div class="container">
+			<div class="section-head">
+				<h2 class="h2" id="demo-title">Попробуйте кабинет Гуляша</h2>
+				<p class="lead">Это интерактивный макет. Магазин и данные выдуманы, но кнопки, фильтры и переключатели работают: меняйте режимы и смотрите, что происходит.</p>
+			</div>
+
+			<div class="demo-tabs" role="tablist" aria-label="Разделы кабинета" data-tabs>
+				<button class="demo-tab" role="tab" id="tab-workshop" aria-controls="panel-workshop" aria-selected="true" data-tab="workshop">Мастерская</button>
+				<button class="demo-tab" role="tab" id="tab-couriers" aria-controls="panel-couriers" aria-selected="false" tabindex="-1" data-tab="couriers">Курьеры</button>
+				<button class="demo-tab" role="tab" id="tab-occasions" aria-controls="panel-occasions" aria-selected="false" tabindex="-1" data-tab="occasions">Поводы клиентов</button>
+				<button class="demo-tab" role="tab" id="tab-stock" aria-controls="panel-stock" aria-selected="false" tabindex="-1" data-tab="stock">Склад свежести</button>
+			</div>
+
+			<div class="app">
+				<aside class="app__side" aria-hidden="true">
+					<div class="app__brand"><svg><use href="#logo-mark"/></svg> Гуляш</div>
+					<div class="app__shop"><b>Пион и Ко</b>Екатеринбург · 2 точки</div>
+					<button class="app__navitem is-active" type="button" tabindex="-1" data-side="workshop"><span class="dot"></span>Мастерская</button>
+					<button class="app__navitem" type="button" tabindex="-1" data-side="couriers"><span class="dot"></span>Курьеры</button>
+					<button class="app__navitem" type="button" tabindex="-1" data-side="occasions"><span class="dot"></span>Поводы клиентов</button>
+					<button class="app__navitem" type="button" tabindex="-1" data-side="stock"><span class="dot"></span>Склад свежести</button>
+				</aside>
+
+				<div class="app__main">
+					<!-- Мастерская -->
+					<div class="panel" role="tabpanel" id="panel-workshop" aria-labelledby="tab-workshop" data-panel="workshop">
+						<div class="panel__bar">
+							<h3 class="panel__title">Очередь сборки</h3>
+							<button class="btn btn--cyan btn--sm" type="button" data-ws-add>Новый заказ</button>
+						</div>
+						<div class="kpis">
+							<div class="kpi"><div class="kpi__label">В работе</div><div class="kpi__value" data-ws-kpi="active">0</div><div class="kpi__delta" data-ws-kpi-d="active"></div></div>
+							<div class="kpi"><div class="kpi__label">Сборка в среднем</div><div class="kpi__value" data-ws-kpi="avg">0</div><div class="kpi__delta" data-ws-kpi-d="avg"></div></div>
+							<div class="kpi"><div class="kpi__label">Успеваем к сроку</div><div class="kpi__value" data-ws-kpi="ontime">0</div><div class="kpi__delta" data-ws-kpi-d="ontime"></div></div>
+						</div>
+						<div class="panel__bar">
+							<div class="chips" role="group" aria-label="Канал заказа" data-ws-filters></div>
+						</div>
+						<div class="board" data-ws-board></div>
+					</div>
+
+					<!-- Курьеры -->
+					<div class="panel" role="tabpanel" id="panel-couriers" aria-labelledby="tab-couriers" data-panel="couriers" hidden>
+						<div class="panel__bar">
+							<h3 class="panel__title">Маршруты курьеров</h3>
+							<div class="switch switch--bloom" role="group" aria-label="Нагрузка" data-map-day>
+								<button type="button" aria-pressed="true" data-value="normal">Обычный вторник</button>
+								<button type="button" aria-pressed="false" data-value="peak">8 марта</button>
+							</div>
+							<div class="switch" role="group" aria-label="Кто распределяет" data-map-mode>
+								<button type="button" aria-pressed="false" data-value="manual">Вручную</button>
+								<button type="button" aria-pressed="true" data-value="auto">Гуляш</button>
+							</div>
+						</div>
+						<div class="kpis">
+							<div class="kpi"><div class="kpi__label">Доставка в среднем</div><div class="kpi__value" data-map-kpi="avg">—</div><div class="kpi__delta" data-map-kpi-d="avg"></div></div>
+							<div class="kpi"><div class="kpi__label">Опоздают</div><div class="kpi__value" data-map-kpi="late">—</div><div class="kpi__delta" data-map-kpi-d="late"></div></div>
+							<div class="kpi"><div class="kpi__label">Пробег курьеров</div><div class="kpi__value" data-map-kpi="km">—</div><div class="kpi__delta" data-map-kpi-d="km"></div></div>
+						</div>
+						<div class="mapwrap">
+							<div class="map" data-map></div>
+							<div class="map__legend">
+								<div data-map-couriers style="display:contents"></div>
+								<button class="btn btn--light btn--sm" type="button" data-map-run>Запустить смену</button>
+								<p class="map__note" data-map-note></p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Поводы -->
+					<div class="panel" role="tabpanel" id="panel-occasions" aria-labelledby="tab-occasions" data-panel="occasions" hidden>
+						<div class="panel__bar">
+							<h3 class="panel__title">Поводы на ближайшие дни</h3>
+							<div class="switch" role="group" aria-label="Период" data-crm-range>
+								<button type="button" aria-pressed="true" data-value="7">7 дней</button>
+								<button type="button" aria-pressed="false" data-value="14">14 дней</button>
+								<button type="button" aria-pressed="false" data-value="30">30 дней</button>
+							</div>
+						</div>
+						<div class="panel__bar">
+							<div class="chips" role="group" aria-label="Сегмент клиентов" data-crm-segments></div>
+						</div>
+						<div class="crm">
+							<div>
+								<div class="clients" data-crm-list></div>
+								<p class="footnote muted" data-crm-summary></p>
+							</div>
+							<div class="phone">
+								<span class="phone__notch" aria-hidden="true"></span>
+								<div class="phone__clock" data-crm-clock>10:00</div>
+								<div class="phone__date" data-crm-date></div>
+								<div data-crm-push aria-live="polite"></div>
+								<div class="phone__actions">
+									<div class="switch" role="group" aria-label="Шаблон сообщения" data-crm-template>
+										<button type="button" aria-pressed="true" data-value="remind">Напомнить</button>
+										<button type="button" aria-pressed="false" data-value="repeat">Повтор</button>
+										<button type="button" aria-pressed="false" data-value="promo">−10%</button>
+									</div>
+									<button class="btn btn--cyan btn--sm" type="button" data-crm-send>Отправить push</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Склад -->
+					<div class="panel" role="tabpanel" id="panel-stock" aria-labelledby="tab-stock" data-panel="stock" hidden>
+						<div class="panel__bar">
+							<h3 class="panel__title">Склад свежести</h3>
+							<div class="channels" aria-label="Где сейчас продаются позиции" data-stock-channels></div>
+						</div>
+						<div class="stock__head">
+							<div class="range">
+								<div class="range__head"><label for="stock-day">Промотать время вперёд</label><span class="range__value" data-stock-day-label>Сегодня</span></div>
+								<input type="range" id="stock-day" min="0" max="4" step="1" value="0" data-stock-day>
+							</div>
+						</div>
+						<div class="stock" data-stock-list></div>
+						<div class="advice" data-stock-advice aria-live="polite"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ================= 8 МАРТА + КАЛЬКУЛЯТОР ================= -->
+	<section class="section section--light" id="peak" aria-labelledby="peak-title">
+		<span class="gridlines" aria-hidden="true"></span>
+		<div class="container">
+			<div class="section-head">
+				<h2 class="h2" id="peak-title">Пиковый день по&nbsp;плану, а&nbsp;не&nbsp;в&nbsp;панике</h2>
+				<p class="lead">Режим пика включается заранее. Гуляш считает, сколько букетов успеет собрать мастерская и развезти курьеры, и не продаёт больше.</p>
+			</div>
+
+			<div class="peak">
+				<div class="peak__card peak__card--dark">
+					<div class="chips peak-dates" role="group" aria-label="Выберите праздник" data-peaks></div>
+					<div class="countdown" aria-live="polite">
+						<div><span class="countdown__num pixel" data-cd="d">0</span><span class="countdown__label">дней</span></div>
+						<div><span class="countdown__num pixel" data-cd="h">0</span><span class="countdown__label">часов</span></div>
+						<div><span class="countdown__num pixel" data-cd="m">0</span><span class="countdown__label">минут</span></div>
+					</div>
+					<ol class="timeline" data-peak-timeline></ol>
+				</div>
+
+				<div class="peak__card">
+					<h3 class="h3">Сколько добавит Гуляш</h3>
+					<div class="calc">
+						<div class="range">
+							<div class="range__head"><label for="calc-orders">Заказов в день</label><span class="range__value" data-calc-out="orders">60</span></div>
+							<input type="range" id="calc-orders" min="10" max="400" step="10" value="60" data-calc="orders">
+						</div>
+						<div class="range">
+							<div class="range__head"><label for="calc-check">Средний чек</label><span class="range__value" data-calc-out="check">4 500 ₽</span></div>
+							<input type="range" id="calc-check" min="1500" max="15000" step="500" value="4500" data-calc="check">
+						</div>
+						<div class="range">
+							<div class="range__head"><label for="calc-points">Точек</label><span class="range__value" data-calc-out="points">1</span></div>
+							<input type="range" id="calc-points" min="1" max="20" step="1" value="1" data-calc="points">
+						</div>
+						<div class="calc__result" aria-live="polite">
+							<p class="muted">Дополнительная выручка в год</p>
+							<p class="calc__total pixel" data-calc-total>0 ₽</p>
+							<div class="calc__rows">
+								<div class="calc__row"><span>Повторные заказы по напоминаниям</span><b data-calc-row="repeat">0 ₽</b></div>
+								<div class="calc__row"><span>Заказы, которые не потеряете в пик</span><b data-calc-row="peak">0 ₽</b></div>
+								<div class="calc__row"><span>Меньше списаний и ручной работы</span><b data-calc-row="loss">0 ₽</b></div>
+							</div>
+						</div>
+					</div>
+					<p class="footnote">Оценка концепта: +13% повторных заказов и −2% потерь, как в ресторанной доставке на Гуляше, плюс пять пиковых дней в году с утроенным спросом, где вы перестаёте отказывать клиентам.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ================= ШАГИ + ЦИФРЫ ================= -->
+	<section class="section" aria-labelledby="steps-title">
+		<span class="gridlines" aria-hidden="true"></span>
+		<div class="container">
+			<div class="section-head">
+				<h2 class="h2" id="steps-title">От звонка до&nbsp;первого заказа за&nbsp;21&nbsp;день</h2>
+				<p class="lead">Переносим базу клиентов и меню, обучаем флористов и курьеров. Успеваем до ближайшего праздника, если начать сейчас.</p>
+			</div>
+			<ol class="steps">
+				<li class="step"><span class="step__num pixel">1</span><h3 class="step__title">Звонок на 15 минут</h3><p class="step__text">Разбираем каналы заказов, число курьеров и сезонность. Считаем эффект на ваших цифрах.</p></li>
+				<li class="step"><span class="step__num pixel">2</span><h3 class="step__title">Настройка от 7 дней</h3><p class="step__text">Каталог букетов, зоны и окна доставки, интеграция с кассой, маркетплейсами и мессенджерами.</p></li>
+				<li class="step"><span class="step__num pixel">3</span><h3 class="step__title">Перенос клиентов</h3><p class="step__text">Загружаем базу из таблиц и CRM. Поводы и даты прошлых заказов превращаются в напоминания.</p></li>
+				<li class="step"><span class="step__num pixel">4</span><h3 class="step__title">Запуск и сопровождение</h3><p class="step__text">Персональный менеджер, поддержка вплоть до 24/7 и отдельная подготовка к пиковым датам.</p></li>
+			</ol>
+
+			<h3 class="h3 stats__title">Гуляш в цифрах</h3>
+			<div class="stats">
+				<div class="stat"><span class="stat__value pixel">900+</span><span class="stat__label">точек доставки уже работают на Гуляше</span></div>
+				<div class="stat"><span class="stat__value pixel">1,3 млн+</span><span class="stat__label">заказов в месяц проходит через систему</span></div>
+				<div class="stat"><span class="stat__value pixel">150+</span><span class="stat__label">городов с автоматизированной доставкой</span></div>
+				<div class="stat"><span class="stat__value pixel">−12 мин</span><span class="stat__label">на доставку в час пик за счёт маршрутизации</span></div>
+				<div class="stat"><span class="stat__value pixel">4,8</span><span class="stat__label">средняя оценка приложений, которые мы делаем</span></div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ================= ФОРМА ================= -->
+	<section class="section section--light" id="connect" aria-labelledby="connect-title">
+		<span class="gridlines" aria-hidden="true"></span>
+		<div class="container connect">
+			<div class="connect__aside">
+				<h2 class="h2" id="connect-title">Узнайте, сколько Гуляш добавит вашему&nbsp;магазину</h2>
+				<ul class="connect__list">
+					<li><svg aria-hidden="true"><use href="#i-check"/></svg>Перезвоним в течение 15 минут в рабочее время</li>
+					<li><svg aria-hidden="true"><use href="#i-check"/></svg>Покажем кабинет на примере вашего ассортимента</li>
+					<li><svg aria-hidden="true"><use href="#i-check"/></svg>Посчитаем, успеваем ли подключиться к ближайшему празднику</li>
+				</ul>
+			</div>
+
+			<div class="form-card">
+				<form class="form" novalidate data-form>
+					<div class="field">
+						<label class="field__label" for="f-name">Как к вам обращаться</label>
+						<input class="input" id="f-name" name="name" type="text" autocomplete="name" placeholder="Анна" aria-describedby="f-name-err">
+						<span class="field__error" id="f-name-err" role="alert"></span>
+					</div>
+					<div class="field">
+						<label class="field__label" for="f-phone">Телефон</label>
+						<input class="input" id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (900) 000-00-00" aria-describedby="f-phone-err">
+						<span class="field__error" id="f-phone-err" role="alert"></span>
+					</div>
+					<div class="field">
+						<label class="field__label" for="f-shop">Название магазина</label>
+						<input class="input" id="f-shop" name="shop" type="text" autocomplete="organization" placeholder="Пион и Ко" aria-describedby="f-shop-err">
+						<span class="field__error" id="f-shop-err" role="alert"></span>
+					</div>
+					<div class="field">
+						<label class="field__label" for="f-city">Город <span>необязательно</span></label>
+						<input class="input" id="f-city" name="city" type="text" autocomplete="address-level2" placeholder="Екатеринбург">
+					</div>
+					<fieldset class="field field--full" style="border:0;margin:0;padding:0">
+						<legend class="field__label" style="margin-bottom:8px">Заказов с доставкой в день</legend>
+						<div class="seg">
+							<label><input type="radio" name="volume" value="до 30" checked><span>до 30</span></label>
+							<label><input type="radio" name="volume" value="30–100"><span>30–100</span></label>
+							<label><input type="radio" name="volume" value="100–300"><span>100–300</span></label>
+							<label><input type="radio" name="volume" value="300+"><span>300+</span></label>
+						</div>
+					</fieldset>
+					<div class="field field--full">
+						<label class="check"><input type="checkbox" name="consent" aria-describedby="f-consent-err"> <span>Соглашаюсь на обработку персональных данных и получение сервисных сообщений</span></label>
+						<span class="field__error" id="f-consent-err" role="alert"></span>
+					</div>
+					<div class="form__submit">
+						<button class="btn btn--dark" type="submit" data-submit>Отправить заявку</button>
+						<p class="form__hint">Демо-форма: данные никуда не уходят. Чтобы посмотреть, как выглядит ошибка, укажите номер +7 000 000-00-00.</p>
+					</div>
+				</form>
+
+				<div class="form-state form-state--ok" data-state="ok" hidden tabindex="-1">
+					<span class="form-state__icon"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+					<p class="form-state__title" data-ok-title>Заявка отправлена</p>
+					<p class="form-state__text" data-ok-text></p>
+					<div class="form-state__actions">
+						<a class="btn btn--dark" href="#demo">Пока посмотреть кабинет</a>
+						<button class="btn btn--outline-dark" type="button" data-reset>Отправить ещё одну</button>
+					</div>
+				</div>
+
+				<div class="form-state form-state--err" data-state="err" hidden tabindex="-1">
+					<span class="form-state__icon"><svg aria-hidden="true"><use href="#i-alert"/></svg></span>
+					<p class="form-state__title">Заявка не отправилась</p>
+					<p class="form-state__text" data-err-text>Сервер не ответил. Данные формы сохранены: попробуйте отправить ещё раз или позвоните нам.</p>
+					<div class="form-state__actions">
+						<button class="btn btn--dark" type="button" data-retry>Отправить ещё раз</button>
+						<a class="btn btn--outline-dark" href="tel:+74958683608">+7 495 868-36-08</a>
+						<button class="btn btn--outline-dark" type="button" data-back>Изменить данные</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ================= FAQ ================= -->
+	<section class="section" id="faq" aria-labelledby="faq-title">
+		<span class="gridlines" aria-hidden="true"></span>
+		<div class="container faq">
+			<div>
+				<h2 class="h2" id="faq-title">Вопросы и ответы</h2>
+			</div>
+			<div class="faq__list" data-faq>
+				<div class="faq__item">
+					<button class="faq__q" type="button" aria-expanded="false">Гуляш же для ресторанов. Чем он поможет цветам? <span class="faq__icon" aria-hidden="true"></span></button>
+					<div class="faq__a"><div><p>Доставка букета устроена так же, как доставка пиццы: заказ, сборка за 15–30 минут, курьер, обещанное время и повторная покупка. Кухню заменяет мастерская флориста, а меню — каталог букетов с поштучными остатками. Маршрутизацию, приложение, лояльность и аналитику берём проверенные на 900+ точках.</p></div></div>
+				</div>
+				<div class="faq__item">
+					<button class="faq__q" type="button" aria-expanded="false">Можно ли принимать заказы из мессенджеров и маркетплейсов? <span class="faq__icon" aria-hidden="true"></span></button>
+					<div class="faq__a"><div><p>Да. Заказы из сайта, приложения, мессенджеров, маркетплейсов и от оператора попадают в одну очередь мастерской. Стоп-лист и остатки синхронизируются во всех каналах, поэтому закончившиеся пионы больше никто не продаст.</p></div></div>
+				</div>
+				<div class="faq__item">
+					<button class="faq__q" type="button" aria-expanded="false">Как работают доставка к точному времени и сюрпризы? <span class="faq__icon" aria-hidden="true"></span></button>
+					<div class="faq__a"><div><p>Клиент выбирает окно доставки, а Гуляш ставит букет в сборку так, чтобы он был свежим к выезду, а не стоял три часа. Для сюрпризов курьер получает отметку «не звонить получателю», а отправитель видит статус и фото вручения.</p></div></div>
+				</div>
+				<div class="faq__item">
+					<button class="faq__q" type="button" aria-expanded="false">Сколько длится подключение? <span class="faq__icon" aria-hidden="true"></span></button>
+					<div class="faq__a"><div><p>Минимальная настройка занимает от 7 дней, полный переход в среднем 21 день. Если до 8 марта осталось меньше месяца, сначала включаем мастерскую и маршруты, а приложение и напоминания добавляем после праздника.</p></div></div>
+				</div>
+				<div class="faq__item">
+					<button class="faq__q" type="button" aria-expanded="false">У меня одна точка и три курьера. Это не слишком сложно? <span class="faq__icon" aria-hidden="true"></span></button>
+					<div class="faq__a"><div><p>Гуляш работает и с одной точкой, и с федеральной сетью. Для небольшого магазина главный эффект дают повторные заказы по напоминаниям и порядок в пиковые дни, а модули можно подключать постепенно.</p></div></div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+<footer class="footer">
+	<div class="container">
+		<div class="footer__top">
+			<a class="logo" href="#top"><svg aria-hidden="true"><use href="#logo-mark"/></svg><span>Goulash.tech</span><span class="logo__tag pixel">flowers</span></a>
+			<div class="footer__contacts">
+				<a href="tel:+74958683608">+7 495 868-36-08</a>
+				<a href="mailto:info@goulash.tech">info@goulash.tech</a>
+				<span>Екатеринбург, Куйбышева, 41</span>
+			</div>
+		</div>
+		<p class="footer__note">* Концепт-лендинг, сделанный как тестовое задание. Не является официальным сайтом Goulash.tech и публичной офертой. Показатели для цветочных магазинов — оценки на основе данных ресторанной доставки Goulash.tech, интерфейс кабинета и данные в нём выдуманы.</p>
+	</div>
+</footer>
+
+<div class="toaster" role="status" aria-live="polite" data-toaster></div>
+
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>
