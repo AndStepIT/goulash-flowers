@@ -63,15 +63,18 @@
 					<span>Система автоматизации</span>
 					<span>для цветочных магазинов с доставкой</span>
 				</p>
-				<h1 class="hero__title" id="hero-title">Букет у&nbsp;двери за&nbsp;60&nbsp;минут.<br>Даже 8&nbsp;марта<span class="hero__sup">*</span></h1>
-				<p class="hero__lead">Заказы со всех каналов в одной очереди флориста, курьеры по оптимальным маршрутам, а клиенты возвращаются к каждому своему поводу.</p>
+				<h1 class="hero__title" id="hero-title">
+					<span class="hero__title-accent">60 минут</span>
+					<span>от&nbsp;клика до&nbsp;букета</span>
+					<span>у&nbsp;двери, даже 8&nbsp;марта<span class="hero__sup">*</span></span>
+				</h1>
+				<p class="hero__lead">
+					<span>Заказы из всех каналов в одной очереди флориста,</span>
+					<span>курьеры по маршрутам, а клиенты возвращаются к каждому поводу</span>
+				</p>
 				<div class="hero__actions">
 					<a class="btn btn--light" href="#connect">Обсудить за 15 минут <svg aria-hidden="true"><use href="#i-chevron"/></svg></a>
 					<a class="btn btn--ghost" href="#demo">Попробовать кабинет</a>
-				</div>
-				<div class="hero__peak">
-					<span class="hero__peak-num pixel" data-hero-days>—</span>
-					<span class="hero__peak-text" data-hero-peak>дней до ближайшего пика. Подключение занимает 21 день.</span>
 				</div>
 			</div>
 
@@ -83,10 +86,18 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Полоса праздников — низ героя, в неё упирается столб светофора -->
+		<div class="peakstrip">
+			<span class="gridlines" aria-hidden="true"></span>
+			<div class="container">
+				<ul class="peakstrip__list" data-peakstrip></ul>
+			</div>
+		</div>
 	</section>
 
 	<!-- ================= ФИЛЬМ ================= -->
-	<section class="section" id="film" aria-labelledby="film-title">
+	<section class="section section--white" id="film" aria-labelledby="film-title">
 		<span class="gridlines" aria-hidden="true"></span>
 		<div class="container">
 			<div class="section-head">
@@ -122,8 +133,8 @@
 			<div class="chapters" role="group" aria-label="Этапы заказа" data-chapters></div>
 
 			<div class="cta-row">
-				<a class="btn btn--light" href="#connect" data-cta-context="Хочу доставку как в ролике">Хочу так же для своего магазина <svg aria-hidden="true"><use href="#i-chevron"/></svg></a>
-				<a class="btn btn--ghost" href="#demo">Попробовать кабинет</a>
+				<a class="btn btn--dark" href="#connect" data-cta-context="Хочу доставку как в ролике">Хочу так же для своего магазина <svg aria-hidden="true"><use href="#i-chevron"/></svg></a>
+				<a class="btn btn--outline-dark" href="#demo">Попробовать кабинет</a>
 			</div>
 		</div>
 	</section>

@@ -3,6 +3,9 @@
    Всё на чистом JS: данные выдуманы, но каждое действие меняет экран.
    ========================================================================== */
 
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
+
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -341,12 +344,23 @@ const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 
 	const now = new Date();
 	const sorted = [...PEAKS].sort((a, b) => nextDate(a, now) - nextDate(b, now));
 	const nearest = sorted[0];
-	const days = Math.ceil((nextDate(nearest, now) - now) / 864e5);
-	$('[data-hero-days]').textContent = days;
-	const enough = days > 21;
-	$('[data-hero-peak]').textContent =
-		`${plural(days, ['день', 'дня', 'дней'])} до ${nearest.gen}. ` +
-		(enough ? 'Подключение занимает 21 день: вы успеваете.' : 'Успеем запустить мастерскую и маршруты в экспресс-режиме.');
+	const daysTo = (p) => Math.ceil((nextDate(p, now) - now) / 864e5);
+
+	// полоса праздников внизу героя: ближайший — первым и подсвечен
+	$('[data-peakstrip]').innerHTML = sorted
+		.map((p, i) => {
+			const d = daysTo(p);
+			const note = i === 0 ? `<small>${d > 21 ? 'успеете подключиться' : 'экспресс-запуск'}</small>` : '';
+			return `<li><a class="peakstrip__item${i === 0 ? ' is-next' : ''}" href="#peak" data-strip-peak="${p.id}">
+				<span class="peakstrip__num pixel">${d}</span>
+				<span class="peakstrip__label">${plural(d, ['день', 'дня', 'дней'])} до ${p.gen}${note}</span>
+			</a></li>`;
+		})
+		.join('');
+	$('[data-peakstrip]').addEventListener('click', (e) => {
+		const link = e.target.closest('[data-strip-peak]');
+		if (link) $(`[data-peak="${link.dataset.stripPeak}"]`)?.click();
+	});
 
 	// секция «Пиковый день»
 	const chipsWrap = $('[data-peaks]');
@@ -1403,4 +1417,29 @@ $('[data-faq]').addEventListener('click', (e) => {
 		}).observe(el);
 	watch($('.hero'), 'hero');
 	watch($('#connect'), 'connect');
+})();
+
+/* ==========================================================================
+   Плавная прокрутка (Lenis — как на goulash.tech) и якорные ссылки
+   ========================================================================== */
+
+(() => {
+	const headerOffset = () => -($('[data-header]').offsetHeight + 8);
+	const lenis = reducedMotion ? null : new Lenis({ lerp: 0.1, wheelMultiplier: 0.9 });
+	if (lenis) {
+		const raf = (t) => {
+			lenis.raf(t);
+			requestAnimationFrame(raf);
+		};
+		requestAnimationFrame(raf);
+	}
+	document.addEventListener('click', (e) => {
+		const a = e.target.closest('a[href^="#"]');
+		if (!a || a.getAttribute('href') === '#') return;
+		const target = a.getAttribute('href') === '#top' ? 0 : $(a.getAttribute('href'));
+		if (target === null) return;
+		e.preventDefault();
+		if (lenis) lenis.scrollTo(target, { offset: target === 0 ? 0 : headerOffset() });
+		else window.scrollTo({ top: target === 0 ? 0 : target.getBoundingClientRect().top + window.scrollY + headerOffset() });
+	});
 })();
