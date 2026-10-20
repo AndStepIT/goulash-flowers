@@ -81,7 +81,7 @@ body {
 	font-size: 16px;
 	line-height: 1.4;
 	color: var(--g-od-primary);
-	background: var(--g-black);
+	background: var(--g-dark-primary);
 	-webkit-font-smoothing: antialiased;
 	overflow-x: hidden;
 }
@@ -142,6 +142,8 @@ p {
 	z-index: 1;
 	width: min(var(--g-container), 100% - var(--g-gutter) * 2);
 	margin-inline: auto;
+	/* контент не липнет к линиям декоративной сетки */
+	padding-inline: 32px;
 }
 
 .section {
@@ -402,31 +404,37 @@ p {
 	transform: translateY(-6px) rotate(-45deg);
 }
 
-/* --- hero -------------------------------------------------------------- */
+/* --- hero ------------------------------------------------------------ */
 
 .hero {
 	position: relative;
-	min-height: calc(100svh - var(--g-header-h));
 	display: flex;
-	align-items: center;
-	padding-block: 64px;
+	flex-direction: column;
+	min-height: calc(100svh - var(--g-header-h));
 	overflow: hidden;
 }
 
 .hero__inner {
+	flex: 1;
 	display: grid;
 	grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
 	gap: 40px;
-	align-items: center;
+}
+
+.hero__content {
+	align-self: center;
+	padding-block: 72px;
 }
 
 .hero__eyebrow {
 	display: flex;
 	flex-direction: column;
-	font-size: 20px;
-	line-height: 135%;
-	color: var(--g-od-secondary);
-	margin-bottom: 32px;
+	margin: 0 0 32px -16px;
+	padding-left: 14px;
+	border-left: 2px solid var(--g-cyan);
+	font-size: 16px;
+	line-height: 125%;
+	color: var(--g-od-primary);
 }
 
 .hero__title {
@@ -480,23 +488,28 @@ p {
 	color: var(--g-od-secondary);
 }
 
-/* LED-светофор: прямая отсылка к герою goulash.tech, но с цветами */
-.signpost {
+/* LED-светофор: столб уходит под шапку и упирается в полосу клиентов */
+.hero__media {
 	position: relative;
-	justify-self: center;
-	width: min(100%, 460px);
-	aspect-ratio: 460 / 600;
+	display: grid;
+	place-items: center;
+	min-height: 520px;
 }
 
 .signpost__pole {
 	position: absolute;
 	left: 50%;
-	top: -40%;
-	bottom: -40%;
-	width: 18%;
+	top: -200px;
+	bottom: 0;
+	width: clamp(56px, 7vw, 92px);
 	transform: translateX(-50%);
 	background: linear-gradient(90deg, #6d7076 0%, #d7dade 30%, #f4f5f7 45%, #a9adb3 70%, #5d6066 100%);
-	border-radius: 6px;
+}
+
+.signpost {
+	position: relative;
+	width: min(100%, 460px);
+	aspect-ratio: 460 / 560;
 }
 
 .signbox {
@@ -509,13 +522,13 @@ p {
 
 .signbox--top {
 	left: 0;
-	top: 4%;
+	top: 0;
 	width: 62%;
 }
 
 .signbox--bottom {
 	right: 0;
-	top: 52%;
+	top: 50%;
 	width: 54%;
 }
 
@@ -531,6 +544,49 @@ p {
 .signbox__screen canvas {
 	width: 100%;
 	height: 100%;
+}
+
+/* полоса логотипов клиентов, как на goulash.tech */
+.logostrip {
+	position: relative;
+	padding-block: 32px 40px;
+	border-top: 1px solid var(--g-line-on-dark);
+	background: var(--g-dark-primary);
+}
+
+.logostrip__title {
+	margin-bottom: 24px;
+	font-size: 14px;
+	color: var(--g-od-tertiary);
+}
+
+.logostrip__list {
+	display: grid;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	gap: 24px 32px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.logostrip__item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 40px;
+	opacity: 0.55;
+	transition: opacity var(--g-dur) var(--g-ease);
+}
+
+.logostrip__item:hover {
+	opacity: 1;
+}
+
+.logostrip__item img {
+	max-width: 100%;
+	max-height: 40px;
+	width: auto;
+	height: auto;
 }
 
 /* --- showreel ---------------------------------------------------------- */
@@ -736,9 +792,9 @@ p {
 }
 
 .pain--dark {
-	background: var(--g-black);
+	background: var(--g-dark-primary);
 	color: var(--g-od-primary);
-	border-color: var(--g-black);
+	border-color: var(--g-dark-primary);
 }
 
 .pain__value {
@@ -1237,6 +1293,7 @@ p {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) 300px;
 	gap: 16px;
+	align-items: start;
 }
 
 .clients {
@@ -1309,11 +1366,12 @@ p {
 }
 
 .phone {
-	position: relative;
+	position: sticky;
+	top: calc(var(--g-header-h) + 16px);
 	display: flex;
 	flex-direction: column;
 	padding: 14px;
-	min-height: 460px;
+	height: 560px;
 	background: linear-gradient(180deg, #2b1a26 0%, #101317 70%);
 	border: 6px solid #0d0d0f;
 	border-radius: 36px;
@@ -1665,9 +1723,9 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .peak__card--dark {
-	background: var(--g-black);
+	background: var(--g-dark-primary);
 	color: var(--g-od-primary);
-	border-color: var(--g-black);
+	border-color: var(--g-dark-primary);
 }
 
 .countdown {
@@ -2318,7 +2376,7 @@ input[type="range"]::-moz-range-thumb {
 		flex-direction: column;
 		gap: 0;
 		padding: 8px var(--g-gutter) 24px;
-		background: var(--g-black);
+		background: var(--g-dark-primary);
 		border-bottom: 1px solid var(--g-line-on-dark);
 	}
 	.header.is-open .nav a {
@@ -2336,8 +2394,21 @@ input[type="range"]::-moz-range-thumb {
 	.hero {
 		min-height: 0;
 	}
+	.hero__content {
+		padding-block: 56px 0;
+	}
+	.hero__media {
+		min-height: 0;
+		padding-block: 48px 64px;
+	}
 	.signpost {
 		width: min(100%, 380px);
+	}
+	.logostrip__list {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+	.container {
+		padding-inline: 24px;
 	}
 	.mapwrap,
 	.crm {
@@ -2348,7 +2419,9 @@ input[type="range"]::-moz-range-thumb {
 		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 	}
 	.phone {
-		min-height: 400px;
+		position: relative;
+		top: 0;
+		height: 520px;
 		max-width: 360px;
 		width: 100%;
 		margin-inline: auto;
@@ -2387,20 +2460,33 @@ input[type="range"]::-moz-range-thumb {
 		font-size: 30px;
 	}
 	.lead,
-	.hero__lead,
-	.hero__eyebrow {
+	.hero__lead {
 		font-size: 17px;
 	}
-	.hero {
-		padding-block: 32px 48px;
+	.container {
+		padding-inline: 0;
+	}
+	.hero__content {
+		padding-block: 32px 0;
+	}
+	.hero__eyebrow {
+		margin-left: 0;
+	}
+	.hero__media {
+		padding-block: 40px 48px;
 	}
 	.signpost {
 		width: min(100%, 320px);
-		margin-top: 40px;
 	}
 	.signpost__pole {
-		top: -6%;
-		bottom: -10%;
+		top: 0;
+	}
+	.logostrip__list {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 20px 16px;
+	}
+	.logostrip__item img {
+		max-height: 28px;
 	}
 	.hero__title {
 		font-size: 40px;

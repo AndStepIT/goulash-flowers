@@ -2,3 +2,4 @@ node_modules
 dist
 assets/video/raw
 *.log
+assets/img/raw

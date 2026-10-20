@@ -358,12 +358,12 @@ const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 
 	const playBtn = $('[data-film-play]');
 	const chaptersWrap = $('[data-chapters]');
 
-	// доли длительности ролика: сцены одинаковой длины
+	// at — начало сцены в секундах исходного 16-секундного ролика
 	const SCENES = [
-		{ chapter: 'Заказ', title: 'Заказ принят', text: 'Пионы, 15 шт · к 20:00 · сюрприз', icon: 'i-bag', clock: [0, 2] },
-		{ chapter: 'Мастерская', title: 'Собран за 12 минут', text: 'Флорист Ольга · букет в очереди был первым', icon: 'i-flower', clock: [2, 14] },
-		{ chapter: 'Курьер', title: 'Курьер в пути', text: 'Маршрут построен · 3,2 км · будет в 19:58', icon: 'i-bike', clock: [14, 44] },
-		{ chapter: 'Вручение', title: 'Доставлено вовремя', text: 'Отправитель получил фото вручения', icon: 'i-door', clock: [44, 47] },
+		{ at: 0, chapter: 'Заказ', title: 'Заказ принят', text: 'Пионы, 15 шт · к 20:00 · сюрприз', icon: 'i-bag', clock: [0, 2] },
+		{ at: 3.5, chapter: 'Мастерская', title: 'Собран за 12 минут', text: 'Флорист Ольга · букет в очереди был первым', icon: 'i-flower', clock: [2, 14] },
+		{ at: 7.5, chapter: 'Курьер', title: 'Курьер в пути', text: 'Маршрут построен · 3,2 км · будет в 19:58', icon: 'i-bike', clock: [14, 44] },
+		{ at: 11, chapter: 'Вручение', title: 'Доставлено вовремя', text: 'Отправитель получил фото вручения', icon: 'i-door', clock: [44, 47] },
 	];
 
 	chaptersWrap.innerHTML = SCENES.map(
@@ -375,7 +375,7 @@ const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 
 	let useVideo = true;
 	let virtualT = 0; // секунды, если видео ещё нет
 	let virtualPlaying = !reducedMotion;
-	const VIRTUAL_DUR = 15;
+	const VIRTUAL_DUR = 16;
 	let lastScene = -1;
 
 	const duration = () => (useVideo && video.duration && isFinite(video.duration) ? video.duration : VIRTUAL_DUR);
@@ -390,10 +390,11 @@ const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 
 
 	const render = () => {
 		const dur = duration();
-		const t = currentTime() % dur;
-		const seg = dur / SCENES.length;
-		const i = Math.min(SCENES.length - 1, Math.floor(t / seg));
-		const p = (t - i * seg) / seg;
+		const t = ((currentTime() % dur) / dur) * VIRTUAL_DUR;
+		let i = SCENES.length - 1;
+		while (i > 0 && t < SCENES[i].at) i--;
+		const end = SCENES[i + 1]?.at ?? VIRTUAL_DUR;
+		const p = (t - SCENES[i].at) / (end - SCENES[i].at);
 		const s = SCENES[i];
 		const minutes = s.clock[0] + (s.clock[1] - s.clock[0]) * p;
 		const totalSec = Math.floor(minutes * 60);
@@ -453,7 +454,7 @@ const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 
 	chaptersWrap.addEventListener('click', (e) => {
 		const b = e.target.closest('[data-chapter]');
 		if (!b) return;
-		const t = (duration() / SCENES.length) * Number(b.dataset.chapter) + 0.05;
+		const t = (SCENES[Number(b.dataset.chapter)].at / VIRTUAL_DUR) * duration() + 0.05;
 		if (useVideo) {
 			video.currentTime = t;
 			video.play().catch(() => {});
