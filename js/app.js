@@ -262,6 +262,50 @@ function ledSign(canvas, mode) {
 
 $$('canvas[data-led]').forEach((c) => ledSign(c, c.dataset.led));
 
+// Гомография: прямоугольник canvas → четырёхугольник экрана на рендере.
+// Координаты data-quad — в пикселях рендера шириной 1200.
+function homography(src, dst) {
+	const A = [];
+	src.forEach(([x, y], i) => {
+		const [u, v] = dst[i];
+		A.push([x, y, 1, 0, 0, 0, -u * x, -u * y, u]);
+		A.push([0, 0, 0, x, y, 1, -v * x, -v * y, v]);
+	});
+	// метод Гаусса для системы 8×8
+	for (let c = 0; c < 8; c++) {
+		let p = c;
+		for (let r = c + 1; r < 8; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+		[A[c], A[p]] = [A[p], A[c]];
+		for (let r = 0; r < 8; r++) {
+			if (r === c) continue;
+			const f = A[r][c] / A[c][c];
+			for (let k = c; k < 9; k++) A[r][k] -= f * A[c][k];
+		}
+	}
+	const [a, b, cc, d, e, f, g, h] = A.map((row, i) => row[8] / row[i]);
+	return `matrix3d(${a},${d},0,${g},${b},${e},0,${h},0,0,1,0,${cc},${f},0,1)`;
+}
+
+(() => {
+	const sign = $('.sign');
+	if (!sign) return;
+	const screens = $$('[data-quad]', sign).map((el) => {
+		const canvas = $('canvas', el);
+		const w = canvas.width;
+		const h = canvas.height;
+		el.style.width = `${w}px`;
+		el.style.height = `${h}px`;
+		const quad = el.dataset.quad.split(' ').map((p) => p.split(',').map(Number));
+		return { el, matrix: homography([[0, 0], [w, 0], [w, h], [0, h]], quad) };
+	});
+	const fit = () => {
+		const s = sign.clientWidth / 1200;
+		screens.forEach(({ el, matrix }) => (el.style.transform = `scale(${s}) ${matrix}`));
+	};
+	new ResizeObserver(fit).observe(sign);
+	fit();
+})();
+
 /* ==========================================================================
    Пиковые даты: герой + обратный отсчёт
    ========================================================================== */

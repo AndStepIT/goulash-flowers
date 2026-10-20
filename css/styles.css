@@ -539,26 +539,16 @@ p {
 	mask-image: linear-gradient(to bottom, transparent 0, #000 9%, #000 91%, transparent 100%);
 }
 
-/* координаты экранов на рендере 3712×4608 */
+/* экран — плоский canvas, натянутый на четырёхугольник экрана рендера
+   через matrix3d (см. fitScreens в app.js) */
 .sign__screen {
 	position: absolute;
+	left: 0;
+	top: 0;
 	overflow: hidden;
 	background: #0b0b0c;
-	border-radius: 6% / 5%;
-}
-
-.sign__screen--top {
-	left: 16.35%;
-	top: 15.49%;
-	width: 23.01%;
-	height: 23.63%;
-}
-
-.sign__screen--bottom {
-	left: 60.78%;
-	top: 59.38%;
-	width: 24.19%;
-	height: 25.72%;
+	border-radius: 26px;
+	transform-origin: 0 0;
 }
 
 .sign__screen canvas {
