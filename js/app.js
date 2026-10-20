@@ -58,6 +58,9 @@ function toast(text) {
 		burger.setAttribute('aria-expanded', String(open));
 	});
 	$$('.nav a').forEach((a) => a.addEventListener('click', close));
+	const onScroll = () => header.classList.toggle('is-stuck', window.scrollY > 8);
+	window.addEventListener('scroll', onScroll, { passive: true });
+	onScroll();
 	document.addEventListener('keydown', (e) => e.key === 'Escape' && close());
 })();
 
@@ -156,14 +159,17 @@ const SPRITES = {
 
 function ledSign(canvas, mode) {
 	const ctx = canvas.getContext('2d');
-	const N = 32; // светодиодов по стороне, спрайт 16×16 рисуется квадратами 2×2
-	const size = canvas.width;
-	const pitch = size / N;
+	// 32 светодиода по ширине, по высоте — сколько поместится в экран;
+	// спрайт 16×16 рисуется квадратами 2×2 и центрируется по вертикали
+	const N = 32;
+	const pitch = canvas.width / N;
+	const ROWS = Math.round(canvas.height / pitch);
+	const oy0 = Math.floor((ROWS - N) / 2);
 	const r = pitch * 0.34;
 	const off = '#1d1d21';
 
 	const spriteGrid = (sprite, dx = 0) => {
-		const grid = Array.from({ length: N }, () => Array(N).fill(null));
+		const grid = Array.from({ length: ROWS }, () => Array(N).fill(null));
 		sprite.forEach((row, y) => {
 			for (let x = 0; x < 16; x++) {
 				const c = LED_COLORS[row[x]];
@@ -171,7 +177,7 @@ function ledSign(canvas, mode) {
 				for (let oy = 0; oy < 2; oy++)
 					for (let ox = 0; ox < 2; ox++) {
 						const gx = x * 2 + ox + dx;
-						if (gx >= 0 && gx < N) grid[y * 2 + oy][gx] = c;
+						if (gx >= 0 && gx < N) grid[oy0 + y * 2 + oy][gx] = c;
 					}
 			}
 		});
@@ -180,8 +186,8 @@ function ledSign(canvas, mode) {
 
 	const draw = (grid, alphaAt = () => 1) => {
 		ctx.fillStyle = '#0b0b0c';
-		ctx.fillRect(0, 0, size, size);
-		for (let y = 0; y < N; y++)
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		for (let y = 0; y < ROWS; y++)
 			for (let x = 0; x < N; x++) {
 				const cx = (x + 0.5) * pitch;
 				const cy = (y + 0.5) * pitch;
@@ -228,7 +234,7 @@ function ledSign(canvas, mode) {
 	const order = ['tulip', 'bouquet', 'rose'];
 	if (reducedMotion) return draw(spriteGrid(SPRITES.tulip));
 	const rand = mulberry32(7);
-	const delays = Array.from({ length: N }, (_, y) => Array.from({ length: N }, () => (N - y) / N + rand() * 0.18));
+	const delays = Array.from({ length: ROWS }, (_, y) => Array.from({ length: N }, () => (ROWS - y) / ROWS + rand() * 0.18));
 	let idx = 0;
 	let start = performance.now();
 	let grid = spriteGrid(SPRITES[order[0]]);

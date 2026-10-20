@@ -317,9 +317,13 @@ p {
 	z-index: 90;
 	height: var(--g-header-h);
 	background: rgba(34, 34, 34, 0.7);
+	border-bottom: 1px solid var(--g-line-on-dark);
+}
+
+/* вверху страницы без блюра — сквозь шапку виден столб светофора */
+.header.is-stuck {
 	backdrop-filter: blur(14px);
 	-webkit-backdrop-filter: blur(14px);
-	border-bottom: 1px solid var(--g-line-on-dark);
 }
 
 .header__inner {
@@ -410,7 +414,10 @@ p {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	min-height: calc(100svh - var(--g-header-h));
+	min-height: 100svh;
+	margin-top: calc(var(--g-header-h) * -1);
+	padding-top: var(--g-header-h);
+	border-bottom: 1px solid var(--g-line-on-dark);
 	overflow: hidden;
 }
 
@@ -488,105 +495,72 @@ p {
 	color: var(--g-od-secondary);
 }
 
-/* LED-светофор: столб уходит под шапку и упирается в полосу клиентов */
+/* LED-светофор: 3D-рендер столба, анимация поверх экранов.
+   Столб продлевается полоской из того же рендера — вверх под шапку
+   и вниз до линии, которой заканчивается герой. */
 .hero__media {
 	position: relative;
 	display: grid;
 	place-items: center;
-	min-height: 520px;
 }
 
-.signpost__pole {
-	position: absolute;
-	left: 50%;
-	top: -200px;
-	bottom: 0;
-	width: clamp(56px, 7vw, 92px);
-	transform: translateX(-50%);
-	background: linear-gradient(90deg, #6d7076 0%, #d7dade 30%, #f4f5f7 45%, #a9adb3 70%, #5d6066 100%);
-}
-
-.signpost {
+.sign {
+	--pole-left: 46.75%;
+	--pole-width: 9.333%;
 	position: relative;
-	width: min(100%, 460px);
-	aspect-ratio: 460 / 560;
+	width: min(100%, 500px);
+	aspect-ratio: 1200 / 1490;
 }
 
-.signbox {
+.sign::before,
+.sign::after {
+	content: "";
 	position: absolute;
-	padding: 4.5%;
-	border-radius: 9%;
-	background: linear-gradient(145deg, #f2f3f5 0%, #c3c7cc 40%, #9da2a8 70%, #e1e3e6 100%);
-	box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+	left: var(--pole-left);
+	width: var(--pole-width);
+	height: 100vh;
+	background: url("../assets/img/pole.png") repeat-y center top / 100% 1px;
 }
 
-.signbox--top {
-	left: 0;
-	top: 0;
-	width: 62%;
+.sign::before {
+	bottom: calc(100% - 1px);
 }
 
-.signbox--bottom {
-	right: 0;
-	top: 50%;
-	width: 54%;
+.sign::after {
+	top: calc(100% - 1px);
 }
 
-.signbox__screen {
+.sign__img {
 	position: relative;
-	aspect-ratio: 1;
-	border-radius: 12%;
-	background: #0b0b0c;
-	overflow: hidden;
-	box-shadow: inset 0 0 0 2px #050505;
-}
-
-.signbox__screen canvas {
 	width: 100%;
 	height: 100%;
 }
 
-/* полоса логотипов клиентов, как на goulash.tech */
-.logostrip {
-	position: relative;
-	padding-block: 32px 40px;
-	border-top: 1px solid var(--g-line-on-dark);
-	background: var(--g-dark-primary);
+/* координаты экранов на рендере 3712×4608 */
+.sign__screen {
+	position: absolute;
+	overflow: hidden;
+	background: #0b0b0c;
+	border-radius: 4%;
 }
 
-.logostrip__title {
-	margin-bottom: 24px;
-	font-size: 14px;
-	color: var(--g-od-tertiary);
+.sign__screen--top {
+	left: 10.78%;
+	top: 15.19%;
+	width: 29.85%;
+	height: 24.41%;
 }
 
-.logostrip__list {
-	display: grid;
-	grid-template-columns: repeat(6, minmax(0, 1fr));
-	gap: 24px 32px;
-	margin: 0;
-	padding: 0;
-	list-style: none;
+.sign__screen--bottom {
+	left: 62.42%;
+	top: 57.03%;
+	width: 25.92%;
+	height: 23.2%;
 }
 
-.logostrip__item {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 40px;
-	opacity: 0.55;
-	transition: opacity var(--g-dur) var(--g-ease);
-}
-
-.logostrip__item:hover {
-	opacity: 1;
-}
-
-.logostrip__item img {
-	max-width: 100%;
-	max-height: 40px;
-	width: auto;
-	height: auto;
+.sign__screen canvas {
+	width: 100%;
+	height: 100%;
 }
 
 /* --- showreel ---------------------------------------------------------- */
@@ -2397,15 +2371,23 @@ input[type="range"]::-moz-range-thumb {
 	.hero__content {
 		padding-block: 56px 0;
 	}
+	.hero__inner {
+		gap: 0;
+	}
+	/* светофор над текстом: столб уходит под шапку и упирается в линию */
 	.hero__media {
-		min-height: 0;
-		padding-block: 48px 64px;
+		order: -1;
+		padding-block: 24px 32px;
+		border-bottom: 1px solid var(--g-line-on-dark);
 	}
-	.signpost {
-		width: min(100%, 380px);
+	.sign {
+		width: min(100%, 360px);
 	}
-	.logostrip__list {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
+	.sign::after {
+		height: 33px;
+	}
+	.hero__content {
+		padding-bottom: 56px;
 	}
 	.container {
 		padding-inline: 24px;
@@ -2473,20 +2455,17 @@ input[type="range"]::-moz-range-thumb {
 		margin-left: 0;
 	}
 	.hero__media {
-		padding-block: 40px 48px;
+		margin-inline: calc(var(--g-gutter) * -1);
+		padding-block: 16px 24px;
 	}
-	.signpost {
-		width: min(100%, 320px);
+	.sign {
+		width: min(78%, 300px);
 	}
-	.signpost__pole {
-		top: 0;
+	.sign::after {
+		height: 25px;
 	}
-	.logostrip__list {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 20px 16px;
-	}
-	.logostrip__item img {
-		max-height: 28px;
+	.hero__content {
+		padding-bottom: 40px;
 	}
 	.hero__title {
 		font-size: 40px;
