@@ -482,7 +482,7 @@ p {
 .hero__inner {
 	flex: 1;
 	display: grid;
-	grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+	grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
 	gap: 40px;
 }
 
@@ -507,11 +507,12 @@ p {
 	line-height: 100%;
 	font-weight: 500;
 	letter-spacing: -0.02em;
-	max-width: 13ch;
+	max-width: 17ch;
 }
 
 .hero__sup {
 	font-size: 0.45em;
+	line-height: 0; /* звёздочка не раздвигает строки заголовка */
 	vertical-align: super;
 	color: var(--g-od-tertiary);
 }
@@ -521,7 +522,7 @@ p {
 	font-size: 20px;
 	line-height: 135%;
 	color: var(--g-od-secondary);
-	max-width: 44ch;
+	max-width: 58ch;
 }
 
 .hero__actions {
@@ -538,7 +539,7 @@ p {
 	margin-top: 56px;
 	padding-top: 24px;
 	border-top: 1px solid var(--g-line-on-dark);
-	max-width: 520px;
+	max-width: 720px;
 }
 
 .hero__peak-num {
@@ -1741,6 +1742,8 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .peak__card {
+	display: flex;
+	flex-direction: column;
 	padding: 40px;
 	border-radius: var(--g-r-xl);
 	background: var(--g-light-primary);
@@ -1824,13 +1827,23 @@ input[type="range"]::-moz-range-thumb {
 	margin-top: 28px;
 }
 
+/* кнопки карточек прижаты к низу — карточки одной высоты */
 .calc__cta {
 	width: 100%;
-	margin-top: 28px;
+	margin-top: auto;
 }
 
 .peak__cta {
-	margin-top: 28px;
+	align-self: flex-start;
+	margin-top: auto;
+}
+
+.peak__card .footnote {
+	margin-bottom: 28px;
+}
+
+.peak__card--dark .timeline {
+	margin-bottom: 28px;
 }
 
 .calc__result {
